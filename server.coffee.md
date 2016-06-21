@@ -48,8 +48,25 @@ I had something more complex here that used the public API rather than the priva
       socket.emit 'configure',
         support: true
 
-      socket.on 'connect_error', ->
-        debug 'connect_error'
+      socket.on 'connect_error', (o) ->
+        debug 'connect_error', o.stack ? o.toString()
+      socket.on 'connect_timeout', ->
+        debug 'connect_timeout'
+      socket.on 'reconnect', (n) ->
+        debug 'reconnect', n
+      socket.on 'reconnect_attempt', ->
+        debug 'reconnect_attempt'
+      socket.on 'reconnecting', (n) ->
+        debug 'reconnecting', n
+      socket.on 'reconnect_error', (o) ->
+        debug 'reconnect_error', o.stack ? o.toString()
+      socket.on 'reconnect_failed', ->
+        debug 'reconnect_failed'
+
+      socket.on 'connect', ->
+        debug 'connect'
+      socket.on 'error', (o) ->
+        debug 'connect', o.stack ? o.toString()
       socket.on 'disconnect', ->
         debug 'disconnect'
 
