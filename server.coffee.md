@@ -45,9 +45,6 @@ Socket-to-Mail
 
 I had something more complex here that used the public API rather than the private one, but in our setup we don't allow machine authentication on the public API.
 
-      socket.emit 'configure',
-        support: true
-
       socket.on 'connect_error', (o) ->
         debug 'connect_error', o.stack ? o.toString()
       socket.on 'connect_timeout', ->
@@ -65,6 +62,9 @@ I had something more complex here that used the public API rather than the priva
 
       socket.on 'connect', ->
         debug 'connect'
+        socket.emit 'configure',
+          support: true
+
       socket.on 'error', (o) ->
         debug 'connect', o.stack ? o.toString()
       socket.on 'disconnect', ->
