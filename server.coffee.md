@@ -74,6 +74,10 @@ I had something more complex here that used the public API rather than the priva
         subject = """
           #{event.error} in #{event.application} on #{event.host}
         """
+        if event.error is 'missing-rule'
+          subject = """
+            #{event.error} #{event.destination}
+          """
         content = """
 
           Error `#{event.error}` was reported by #{event.application}
