@@ -15,6 +15,13 @@ Socket-to-Mail
 
     run = (cfg) ->
 
+Configuration:
+- `sender` is the sending email address
+- `dev_recipient` is the receiving email address(es) for `dev` messages
+- `ops_recipient` is the receiving email address(es) for `ops` messages
+- `csr_recipient` is the receiving email address(es) for `ops` messages
+- `recipient` is the email address used if a more specific one is not available
+
       unless cfg.sender?
         debug 'Missing `sender`'
         return
@@ -70,15 +77,23 @@ I had something more complex here that used the public API rather than the priva
       socket.on 'disconnect', ->
         debug 'disconnect'
 
-      socket.on 'report_dev', seem (event) ->
-        subject = """
-          #{event.error} in #{event.application} on #{event.host}
+      subject_template = (event) ->
+        switch event.error
+          when 'missing-rule'
+            """
+              #{event.error} #{event.destination}
+            """
+          when 'not-registered'
+            """
+              #{event.error} #{event.destination}
+            """
+          when ''
+            """
+              #{event.error} in #{event.application} on #{event.host}
+            """
+
+      content_template = (event) ->
         """
-        if event.error is 'missing-rule'
-          subject = """
-            #{event.error} #{event.destination}
-          """
-        content = """
 
           Error `#{event.error}` was reported by #{event.application}
           on #{event.host} at #{event.stamp}.
@@ -91,9 +106,46 @@ I had something more complex here that used the public API rather than the priva
 
         """
 
+`dev` messages
+
+      socket.on 'report_dev', seem (event) ->
+
+        subject = subject_template event
+        content = content_template event
+
         mail =
           from: cfg.sender
-          to: cfg.recipient
+          to: cfg.dev_recipient ? cfg.recipient
+          subject: subject
+          markdown: content
+        info = yield sendMail.call transporter, mail
+        debug 'sendMail', info
+
+`ops` messages
+
+      socket.on 'report_ops', seem (event) ->
+
+        subject = subject_template event
+        content = content_template event
+
+        mail =
+          from: cfg.sender
+          to: cfg.ops_recipient ? cfg.recipient
+          subject: subject
+          markdown: content
+        info = yield sendMail.call transporter, mail
+        debug 'sendMail', info
+
+`csr` messages
+
+      socket.on 'report_csr', seem (event) ->
+
+        subject = subject_template event
+        content = content_template event
+
+        mail =
+          from: cfg.sender
+          to: cfg.csr_recipient ? cfg.recipient
           subject: subject
           markdown: content
         info = yield sendMail.call transporter, mail
