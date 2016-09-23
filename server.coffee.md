@@ -87,6 +87,10 @@ I had something more complex here that used the public API rather than the priva
             """
               #{event.error} #{event.destination}
             """
+          when 'invalid'
+            """
+              #{event.error} #{event.ip}
+            """
           else
             """
               #{event.error} in #{event.application} on #{event.host}
