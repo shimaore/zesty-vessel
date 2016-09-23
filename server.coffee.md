@@ -87,7 +87,7 @@ I had something more complex here that used the public API rather than the priva
             """
               #{event.error} #{event.destination}
             """
-          when ''
+          else
             """
               #{event.error} in #{event.application} on #{event.host}
             """
