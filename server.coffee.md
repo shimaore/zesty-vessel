@@ -13,6 +13,10 @@ Socket-to-Mail
     @name = "#{pkg.name}:server"
     debug = (require 'debug') @name
 
+    ignored_errors = [
+      'invalid'
+    ]
+
     run = (cfg) ->
 
 Configuration:
@@ -113,6 +117,7 @@ I had something more complex here that used the public API rather than the priva
 `dev` messages
 
       socket.on 'report_dev', seem (event) ->
+        return if event.error in ignored_errors
 
         subject = subject_template event
         content = content_template event
@@ -128,6 +133,7 @@ I had something more complex here that used the public API rather than the priva
 `ops` messages
 
       socket.on 'report_ops', seem (event) ->
+        return if event.error in ignored_errors
 
         subject = subject_template event
         content = content_template event
@@ -143,6 +149,7 @@ I had something more complex here that used the public API rather than the priva
 `csr` messages
 
       socket.on 'report_csr', seem (event) ->
+        return if event.error in ignored_errors
 
         subject = subject_template event
         content = content_template event
