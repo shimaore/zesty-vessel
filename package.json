@@ -1,7 +1,7 @@
 {
   "name": "zesty-vessel",
   "docker_name": "shimaore/zesty-vessel",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "Socket-to-mail service",
   "scripts": {
     "pretest": "npm install",
