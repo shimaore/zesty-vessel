@@ -12,6 +12,7 @@ Socket-to-Mail
     pkg = require './package.json'
     @name = "#{pkg.name}:server"
     debug = (require 'debug') @name
+    trace = (require 'debug') "#{@name}:trace"
 
     ignored_errors = [
       'invalid'
@@ -128,7 +129,7 @@ I had something more complex here that used the public API rather than the priva
           subject: subject
           markdown: content
         info = yield sendMail.call transporter, mail
-        debug 'sendMail', info
+        trace 'sendMail', info
 
 `ops` messages
 
@@ -144,7 +145,7 @@ I had something more complex here that used the public API rather than the priva
           subject: subject
           markdown: content
         info = yield sendMail.call transporter, mail
-        debug 'sendMail', info
+        trace 'sendMail', info
 
 `csr` messages
 
@@ -160,7 +161,7 @@ I had something more complex here that used the public API rather than the priva
           subject: subject
           markdown: content
         info = yield sendMail.call transporter, mail
-        debug 'sendMail', info
+        trace 'sendMail', info
 
     if require.main is module
       cfg = require process.env.CONFIG
