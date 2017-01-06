@@ -14,8 +14,6 @@ Socket-to-Mail
     debug = (require 'debug') @name
     trace = (require 'debug') "#{@name}:trace"
 
-    mattermost = request.post cfg.mattermost
-
     ignored_errors = [
       'invalid'
     ]
@@ -56,6 +54,8 @@ Configuration:
         return
 
       socket = io cfg.io
+
+      mattermost = request.post cfg.mattermost
 
 I had something more complex here that used the public API rather than the private one, but in our setup we don't allow machine authentication on the public API.
 
