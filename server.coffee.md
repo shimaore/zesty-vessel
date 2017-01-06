@@ -14,6 +14,8 @@ Socket-to-Mail
     debug = (require 'debug') @name
     trace = (require 'debug') "#{@name}:trace"
 
+    mattermost = request.post cfg.mattermost
+
     ignored_errors = [
       'invalid'
     ]
@@ -130,6 +132,10 @@ I had something more complex here that used the public API rather than the priva
           markdown: content
         info = yield sendMail.call transporter, mail
         trace 'sendMail', info
+
+        yield mattermost
+          .send
+            text: content
 
 `ops` messages
 
