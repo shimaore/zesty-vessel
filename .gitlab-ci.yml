@@ -16,4 +16,4 @@ push:
   - docker push ${CI_REGISTRY_IMAGE}:${PROJECT_TAG}
 
 variables:
-  PROJECT_TAG: ""
+  PROJECT_TAG: "1.5.0"
