@@ -153,6 +153,10 @@ I had something more complex here that used the public API rather than the priva
         info = yield sendMail.call transporter, mail
         trace 'sendMail', info
 
+        yield mattermost
+          .send
+            text: content
+
 `csr` messages
 
       socket.on 'report_csr', seem (event) ->
