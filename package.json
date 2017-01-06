@@ -6,7 +6,8 @@
   "scripts": {
     "pretest": "npm install",
     "test": "mocha",
-    "start": "coffee server.coffee.md"
+    "start": "coffee server.coffee.md",
+    "version": "./build/gitlab-ci.yml"
   },
   "author": "Stéphane Alnet <stephane@shimaore.net> (http://stephane.shimaore.net/)",
   "license": "Unlicense",
