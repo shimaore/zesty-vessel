@@ -55,8 +55,6 @@ Configuration:
 
       socket = io cfg.io
 
-      mattermost = request.post cfg.mattermost
-
 I had something more complex here that used the public API rather than the private one, but in our setup we don't allow machine authentication on the public API.
 
       socket.on 'connect_error', (o) ->
@@ -133,7 +131,8 @@ I had something more complex here that used the public API rather than the priva
         info = yield sendMail.call transporter, mail
         trace 'sendMail', info
 
-        yield mattermost
+        yield request
+          .post cfg.mattermost
           .send
             text: content
 
