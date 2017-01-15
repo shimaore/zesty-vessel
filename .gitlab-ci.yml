@@ -1,5 +1,7 @@
 build:
   stage: build
+  tags:
+  - shell
   only:
   - master
   script:
@@ -7,6 +9,8 @@ build:
 
 test:
   stage: test
+  tags:
+  - shell
   only:
   - master
   script:
