@@ -115,70 +115,42 @@ I had something more complex here that used the public API rather than the priva
 
         """
 
-`dev` messages
+      log = (error) ->
+        debug "error: #{error.stack ? error.toString()}"
 
-      socket.on 'report_dev', seem (event) ->
-        return if event.error in ignored_errors
+      instantiate = (type) ->
+        type_mattermost = "#{type}_mattermost"
+        type_recipient = "#{type}_recipient"
 
-        yield request
-          .post cfg.mattermost
-          .send
-            text: content
-          .catch -> yes
+        socket.on "report_#{type}", seem (event) ->
+          return if event.error in ignored_errors
 
-        subject = subject_template event
-        content = content_template event
+          channel = cfg[type_mattermost] ? cfg.mattermost
+          if channel?
+            yield request
+              .post
+              .send
+                text: content
+              .catch log
 
-        mail =
-          from: cfg.sender
-          to: cfg.dev_recipient ? cfg.recipient
-          subject: subject
-          markdown: content
-        info = yield sendMail
-          .call transporter, mail
-          .catch -> yes
-        trace 'sendMail', info
+          recipient = cfg[type_recipient] ? cfg.recipient
 
-`ops` messages
+          if recipient?
+            subject = subject_template event
+            content = content_template event
 
-      socket.on 'report_ops', seem (event) ->
-        return if event.error in ignored_errors
+            mail =
+              from: cfg.sender
+              to: recipient
+              subject: subject
+              markdown: content
+            info = yield sendMail
+              .call transporter, mail
+              .catch log
+            trace 'sendMail', info
 
-        yield mattermost
-          .send
-            text: content
-          .catch -> yes
-
-        subject = subject_template event
-        content = content_template event
-
-        mail =
-          from: cfg.sender
-          to: cfg.ops_recipient ? cfg.recipient
-          subject: subject
-          markdown: content
-        info = yield sendMail
-          .call transporter, mail
-          .catch -> yes
-        trace 'sendMail', info
-
-`csr` messages
-
-      socket.on 'report_csr', seem (event) ->
-        return if event.error in ignored_errors
-
-        subject = subject_template event
-        content = content_template event
-
-        mail =
-          from: cfg.sender
-          to: cfg.csr_recipient ? cfg.recipient
-          subject: subject
-          markdown: content
-        info = yield sendMail
-          .call transporter, mail
-          .catch -> yes
-        trace 'sendMail', info
+      for type in ['dev','ops','csr']
+        instantiate type
 
     if require.main is module
       cfg = require process.env.CONFIG
