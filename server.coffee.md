@@ -122,6 +122,13 @@ I had something more complex here that used the public API rather than the priva
         socket.on "report_#{type}", seem (event) ->
           return if event.error in ignored_errors
 
+Build content
+
+          subject = subject_template event
+          content = content_template event
+
+Send to MatterMost
+
           channel = cfg[type_mattermost] ? cfg.mattermost
 
           if channel?
@@ -131,11 +138,11 @@ I had something more complex here that used the public API rather than the priva
                 text: content
               .catch log
 
+Send via email
+
           recipient = cfg[type_recipient] ? cfg.recipient
 
           if recipient?
-            subject = subject_template event
-            content = content_template event
 
             mail =
               from: cfg.sender
