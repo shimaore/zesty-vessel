@@ -134,7 +134,9 @@ I had something more complex here that used the public API rather than the priva
           to: cfg.dev_recipient ? cfg.recipient
           subject: subject
           markdown: content
-        info = yield sendMail.call transporter, mail
+        info = yield sendMail
+          .call transporter, mail
+          .catch -> yes
         trace 'sendMail', info
 
 `ops` messages
@@ -155,7 +157,9 @@ I had something more complex here that used the public API rather than the priva
           to: cfg.ops_recipient ? cfg.recipient
           subject: subject
           markdown: content
-        info = yield sendMail.call transporter, mail
+        info = yield sendMail
+          .call transporter, mail
+          .catch -> yes
         trace 'sendMail', info
 
 `csr` messages
@@ -171,7 +175,9 @@ I had something more complex here that used the public API rather than the priva
           to: cfg.csr_recipient ? cfg.recipient
           subject: subject
           markdown: content
-        info = yield sendMail.call transporter, mail
+        info = yield sendMail
+          .call transporter, mail
+          .catch -> yes
         trace 'sendMail', info
 
     if require.main is module
