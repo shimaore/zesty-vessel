@@ -123,9 +123,10 @@ I had something more complex here that used the public API rather than the priva
           return if event.error in ignored_errors
 
           channel = cfg[type_mattermost] ? cfg.mattermost
+
           if channel?
             yield request
-              .post
+              .post channel
               .send
                 text: content
               .catch log
