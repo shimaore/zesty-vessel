@@ -149,6 +149,8 @@ I had something more complex here that used the public API rather than the priva
       for type in ['dev','ops','csr']
         instantiate type
 
+      debug 'Ready, waiting for connection.'
+
     if require.main is module
       cfg = require process.env.CONFIG
       run cfg
