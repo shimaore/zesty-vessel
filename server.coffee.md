@@ -30,9 +30,6 @@ Configuration:
       unless cfg.sender?
         debug 'Missing `sender`'
         return
-      unless cfg.recipient?
-        debug 'Missing `recipient`'
-        return
 
       switch
         when cfg.mailer.SMTP?
